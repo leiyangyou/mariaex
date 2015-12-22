@@ -229,7 +229,7 @@ defmodule Mariaex.Connection do
   end
 
   def handle_info({:tcp_closed, _}, s) do
-    error(%Mariaex.Error{message: "connection closed"}, s)
+    error({:error, %Mariaex.Error{message: "connection closed"}}, s)
   end
 
   def handle_info(:ping, s = %{keepalive: {keepalive_interval, keepalive_timeout}}) do
@@ -244,7 +244,7 @@ defmodule Mariaex.Connection do
   end
 
   def handle_info(:ping_timeout, s) do
-    error(%Mariaex.Error{message: "keepalive timeout"}, s)
+    error({:error, %Mariaex.Error{message: "keepalive timeout"}}, s)
   end
 
   def handle_info(sock_message, %{sock: {sock_mod, sock}} = s) do
