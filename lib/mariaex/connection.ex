@@ -279,7 +279,8 @@ defmodule Mariaex.Connection do
   end
 
   defp process(blob, %{state: state, substate: substate, tail: tail} = s) do
-    case Messages.decode(tail <> blob, substate || state) do
+    to_decode = if tail == "", do: blob, else: tail <> blob
+    case Messages.decode(to_decode, substate || state) do
       {nil, tail} ->
         %{s | tail: tail}
       {packet, tail} ->
